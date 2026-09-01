@@ -34,7 +34,7 @@ class Lexer:
             if number_str.startswith('.'):
                 number_str = '0' + number_str
             if number_str.endswith('.'):
-                number_str = '0'
+                number_str = number_str + '0'
             
             return Token(TokenType.NUMBER, float(number_str))
 
