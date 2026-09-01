@@ -21,25 +21,27 @@ class Parser:
 
         result = self.expr()
 
-        if self.current_token != None:
+        if self.current_token != None: # Safety check: If there are still tokens left after parsing, raise an error
             self.raise_error()
 
+        print(f'Parsed expression: {result}')  # Debugging line to print the parsed expression
         return result
     
-    def expr(self):
-        result = self.term()
+    def expr(self): # Handles addition and subtraction
+        result = self.term() # Execute the term() method to handle multiplication and division first
 
         while self.current_token != None and self.current_token.type in (TokenType.PLUS, TokenType.MINUS):
             if self.current_token.type == TokenType.PLUS:
                 self.advance()
                 result = AddNode(result, self.term())
             elif self.current_token.type == TokenType.MINUS:
+                self.advance()
                 result = SubtractNode(result, self.term())
         
         return result
     
     def term(self):
-        result = self.factor() 
+        result = self.factor() # Execute the factor() method to handle parentheses and numbers first
 
         while self.current_token != None and self.current_token.type in (TokenType.MULTIPLY, TokenType.DIVIDE, TokenType.POWER):
             if self.current_token.type == TokenType.MULTIPLY:
@@ -79,4 +81,4 @@ class Parser:
             self.advance()
             return MinusNode(self.factor())
         
-        self.raise_error()
+        self.raise_error() # Catch-all error if none of the above conditions are met
