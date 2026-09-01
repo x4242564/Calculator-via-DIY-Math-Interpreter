@@ -2,9 +2,13 @@ import tkinter as tk
 from main import calculate
 
 calculation = ''
+eval = ''
 
 def add_to_calc(symbol):
     global calculation
+    global eval
+    if eval != '':
+        clear()
     calculation += str(symbol)
     result_txt.delete(1.0, 'end')
     result_txt.insert(1.0, calculation)
@@ -12,17 +16,20 @@ def add_to_calc(symbol):
 def evaluate_calc():
     try:
         global calculation
-        print(calculation)
-        calculation = str(calculate(calculation))
+        global eval
+        eval = str(calculate(calculation))
         result_txt.delete(1.0, 'end')
-        result_txt.insert(1.0, calculation)
+        result_txt.insert(1.0, eval)
+        print(f'{calculation} = {eval}')
     except:
         clear()
         result_txt.insert(1.0, 'Error')
 
 def clear():
     global calculation
+    global eval
     calculation = ''
+    eval = ''
     result_txt.delete(1.0, 'end')
 
 root = tk.Tk()
