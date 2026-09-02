@@ -11,4 +11,4 @@ class Number:
         return self.value.is_integer()
 
     def int(self):
-        return int(self.value)
+        self.value = int(self.value)
