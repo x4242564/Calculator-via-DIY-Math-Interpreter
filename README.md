@@ -2,15 +2,13 @@
 
 ## Overview
 
-This project is a small calculator built around a custom math interpreter. Instead of relying on Python's built-in `eval`, it breaks mathematical input into tokens, organizes those tokens into a syntax tree, and then evaluates the tree step by step.
+This project is a simple calculator built around a custom python math interpreter. Instead of relying on Python's built-in `eval`, it breaks mathematical input into tokens, organizes those tokens into a node tree, and then evaluates the tree step by step.
 
 This pattern is common in calculators, scripting languages, formula engines, and domain-specific languages. It makes it easier to support arithmetic precedence, parentheses, unary operations, and validation of invalid input.
 
 ## Tkinter Calculator UI
 
-The project uses Python's `tkinter` package to build a lightweight calculator interface. The UI is designed to let a user type or click numbers and operators, then pass the full expression into the interpreter pipeline. The GUI is intentionally simple and focused on demonstrating how a front-end input can connect to a back-end expression evaluator.
-
-In other words, the calculator interface handles user interaction, while the interpreter handles understanding and evaluating the math expression. This makes the project a good example of combining a basic graphical interface with parsing logic.
+The project uses Python's built-in `tkinter` package to build a lightweight calculator interface. The UI is designed to build expressions with the number and operator buttons, then pass them into the interpreter pipeline. The GUI is pretty simple at the moment and more focused on demonstrating how a front-end input can connect to a back-end evaluator.
 
 ## How the Interpreter Works
 
@@ -22,11 +20,9 @@ The lexer is responsible for reading raw input text and turning it into meaningf
 [(NUMBER: 3), (PLUS), (NUMBER: 4), (MULTIPLY), (LPAREN), (NUMBER: 2), (MINUS), (NUMBER: 1), (RPAREN)]
 ```
 
-This stage is important because it simplifies parsing by converting raw text into structured data. The lexer also helps catch invalid characters early, which improves error handling.
-
 ### Parser
 
-The parser takes the token stream produced by the lexer and builds an expression tree. It applies operator precedence and grouping rules so that multiplication and division are handled before addition and subtraction, and parentheses override normal ordering.
+The parser takes the token stream produced by the lexer and builds an expression tree. It applies PEMDAS precedence so that multiplication and division are handled before addition and subtraction, and parentheses override normal ordering.
 
 This stage is where the structure of an expression becomes explicit. For example, the parser can turn:
 
@@ -52,7 +48,7 @@ The project includes unit tests for both the lexer and parser behavior. These te
 
 The lexer tests helped confirm that numbers, whitespace handling, and token generation were behaving correctly. The parser tests helped verify that arithmetic expressions were being constructed with the right precedence and structure, including nested expressions and multi-step operations.
 
-These tests were critical in discovering issues such as incorrect token handling, expression grouping problems, and logic errors in how the parser composed nodes. The parser and lexer test commits represent a key part of the project’s learning process: they turned vague debugging into concrete, repeatable checks that improved confidence in the implementation.
+The payoff from these tests were almost instant. While testing my assertions I discovered a couple bugs in the parser and lexer that completely went over my head during manual testing.
 
 ## Requirements
 
