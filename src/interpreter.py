@@ -26,10 +26,10 @@ class Interpreter:
             raise Exception('Runtime math error')
     
     def visit_PlusNode(self, node):
-        return self.visit(node.node)
+        return Number(self.visit(node.node).value)
 
     def visit_MinusNode(self, node):
-        return Number(self.visit(node.node).value)
+        return Number(0 - self.visit(node.node).value)
     
     def visit_PowerNode(self, node):
         return Number(self.visit(node.node_a).value ** self.visit(node.node_b).value)

@@ -14,8 +14,14 @@ class TestInterpreter(unittest.TestCase):
         value = Interpreter().visit(AddNode(NumberNode(4), NumberNode(2)))
         self.assertEqual(value, Number(6))
 
+        value = Interpreter().visit(PlusNode(NumberNode(42)))
+        self.assertEqual(value, Number(42))
+
         value = Interpreter().visit(SubtractNode(NumberNode(4), NumberNode(2)))
         self.assertEqual(value, Number(2))
+
+        value = Interpreter().visit(MinusNode(NumberNode(42)))
+        self.assertEqual(value, Number(-42))
 
         value = Interpreter().visit(MultiplyNode(NumberNode(4), NumberNode(2)))
         self.assertEqual(value, Number(8))
