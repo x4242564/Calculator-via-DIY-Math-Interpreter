@@ -15,16 +15,16 @@ def add_to_calc(symbol):
     result_txt.insert(1.0, calculation)
 
 def evaluate_calc():
-    try:
-        global calculation
-        global eval
-        eval = str(calculate(calculation))
+    global calculation
+    global eval
+    eval = str(calculate(calculation))
+    print(f'{calculation} = {eval}')
+    if eval == "None":
+        result_txt.delete(1.0, 'end')
+        result_txt.insert(1.0, 'Error')
+    else:
         result_txt.delete(1.0, 'end')
         result_txt.insert(1.0, eval)
-        print(f'{calculation} = {eval}')
-    except:
-        clear()
-        result_txt.insert(1.0, 'Error')
 
 def clear():
     global calculation
@@ -43,7 +43,8 @@ def backspace():
     if eval != '': # check if the last operation was an evaluation, if so, reset eval and ans
         ans = ''
         eval = ''
-    calculation = calculation[:-1]
+    else:
+        calculation = calculation[:-1]
     result_txt.delete(1.0, 'end')
     result_txt.insert(1.0, calculation)
 
@@ -101,7 +102,7 @@ btn_eval = tk.Button(root, text = '=', command = evaluate_calc, width = 4, font 
 btn_eval.grid(row = 6, column = 4)
 btn_clear = tk.Button(root, text = 'C', command = clear, width = 4, font = ('Ariel', 14))
 btn_clear.grid(row = 6, column = 1)
-btn_backspace = tk.Button(root, text = '<-', command = backspace, width = 4, font = ('Ariel', 14))
+btn_backspace = tk.Button(root, text = 'Del', command = backspace, width = 4, font = ('Ariel', 14))
 btn_backspace.grid(row = 1, column = 1)
 
 root.mainloop()

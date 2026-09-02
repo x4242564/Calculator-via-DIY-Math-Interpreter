@@ -11,9 +11,9 @@ def calculate(text):
         if not tree: calculate(text)
         interpreter = Interpreter()
         value = interpreter.visit(tree)
+        print(f"Result: {value}")
         if value.is_integer():
             value.int()  # Removes decimal point if the value is an integer
-        print(f"Result: {value}")
         return value
     except Exception as e:
         print(e)
