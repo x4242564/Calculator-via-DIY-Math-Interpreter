@@ -6,6 +6,23 @@ This project is a simple calculator built around a custom python math interprete
 
 This pattern is common in calculators, scripting languages, formula engines, and domain-specific languages. It makes it easier to support arithmetic precedence, parentheses, unary operations, and validation of invalid input.
 
+List of functions:
+- Operators:
+    - `^`: Exponential
+    - `/`: Divison
+    - `*`: Multiplication
+    - `-`: Subtraction
+    - `+`: Addition
+- `Ans`: Inserts last equation's evaluation
+- `Del`: Deletes last input
+- `C`: Deletes all inputs
+
+The calculator does **not** support parenthesis multiplication *yet*. For example:
+```
+4(2) = None
+Invalid syntax
+```
+
 ## Tkinter Calculator UI
 
 The project uses Python's built-in `tkinter` package to build a lightweight calculator interface. The UI is designed to build expressions with the number and operator buttons, then pass them into the interpreter pipeline. The GUI is pretty simple at the moment and more focused on demonstrating how a front-end input can connect to a back-end evaluator.
