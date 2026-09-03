@@ -1,5 +1,6 @@
 from tokens import TokenType
 from nodes import *
+from logger import verbose_log, log
 
 class Parser:
     def __init__(self, tokens):
@@ -24,10 +25,11 @@ class Parser:
         if self.current_token != None: # Safety check: If there are still tokens left after parsing, raise an error
             self.raise_error()
 
-        print(f'Parsed expression: {result}')  # Debugging line to print the parsed expression
+        log(f'Post-parse expression: {result}')
         return result
     
-    def expr(self): # Handles addition and subtraction
+    def expr(self):
+        '''Groups addition and subtraction tokens into Add and Subtract nodes'''
         result = self.term() # Execute the term() method to handle multiplication and division first
 
         while self.current_token != None and self.current_token.type in (TokenType.PLUS, TokenType.MINUS):
@@ -41,6 +43,7 @@ class Parser:
         return result
     
     def term(self):
+        '''Groups term tokens into their respective nodes'''
         result = self.factor() # Execute the factor() method to handle parentheses and numbers first
 
         while self.current_token != None and self.current_token.type in (TokenType.MULTIPLY, TokenType.DIVIDE, TokenType.POWER):
@@ -56,8 +59,9 @@ class Parser:
         
         return result
     
-    def factor(self): #PEMDAS
+    def factor(self): # PEMDAS
         token = self.current_token
+        verbose_log(f"Current token: {token}")
 
         if token.type == TokenType.LPAREN:
             self.advance()

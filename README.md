@@ -17,11 +17,7 @@ List of functions:
 - `Del`: Deletes last input
 - `C`: Deletes all inputs
 
-The calculator does **not** support parenthesis multiplication *yet*. For example:
-```
-4(2) = None
-Invalid syntax
-```
+The calculator does **not** support parenthesis multiplication *yet*. For example: `4(2)` will raise an `invalid syntax` error and return `None`. 
 
 ## Tkinter Calculator UI
 
@@ -66,6 +62,12 @@ The project includes unit tests for both the lexer and parser behavior. These te
 The lexer tests helped confirm that numbers, whitespace handling, and token generation were behaving correctly. The parser tests helped verify that arithmetic expressions were being constructed with the right precedence and structure, including nested expressions and multi-step operations.
 
 The payoff from these tests were almost instant. While testing my assertions I discovered a couple bugs in the parser and lexer that completely went over my head during manual testing.
+
+## Verbose Logging
+
+You can configure the logging in `src/logger.py`. This may help with gaining a better understanding of how the interpreter works, certainly helped me further my understanding.
+
+`logging` is enabled by default and shows the minimal steps the interpreter took to solve the given expression. Enable `verbose` to see more detail on the interpreter's process.
 
 ## Requirements
 

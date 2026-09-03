@@ -1,4 +1,5 @@
 from tokens import Token, TokenType
+from logger import log, verbose_log
 
 WHITESPACE = ' \n\t' # space, new line, and tab characters
 DIGITS = '1234567890'
@@ -13,6 +14,7 @@ class Lexer:
         '''Advances to next character until the end of the text or an error occurs'''
         try:
             self.current_char = next(self.text)
+            verbose_log(f"current char: {self.current_char}")
         except StopIteration:
             self.current_char = None
 
@@ -35,11 +37,10 @@ class Lexer:
                 number_str = '0' + number_str
             if number_str.endswith('.'):
                 number_str = number_str + '0'
-            
             return Token(TokenType.NUMBER, float(number_str))
 
     def generate_tokens(self):
-        '''Handles defining tokens with their corresponding type'''
+        '''Iterates through text and defines tokens with their corresponding type'''
         while self.current_char != None:
             if self.current_char in WHITESPACE:
                 self.advance()
@@ -68,3 +69,5 @@ class Lexer:
                 yield Token(TokenType.RPAREN)
             else:
                 raise Exception(f'Illegal character: "{self.current_char}"')
+
+        log(f"Tokens generated sucessfully")
