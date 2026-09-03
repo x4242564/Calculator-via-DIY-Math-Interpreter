@@ -32,7 +32,7 @@ jobs:
     if: "!canceled()"
     steps:
       - name: Check test results
-        run:
+        run: |
           echo "test: ${{ needs.test.result }}"
           [[ "${{ needs.test.result }}" == "success" ]] || exit 1
 
