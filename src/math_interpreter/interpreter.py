@@ -1,5 +1,5 @@
-from nodes import *
-from values import Number
+from .nodes import *
+from .values import Number
 from logger import verbose_log, log
 
 class Interpreter:
