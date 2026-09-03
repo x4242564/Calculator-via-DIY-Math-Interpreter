@@ -6,6 +6,7 @@ on:
 
 jobs:
   test:
+    name: Unit tests
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -23,3 +24,15 @@ jobs:
         env:
           PYTHONPATH: src
         run: python -m unittest discover -s test -p "*_test.py"
+
+  gate:
+    name: PR Test Gate
+    runs-on: ubuntu-latest
+    needs: test
+    if: "!canceled()"
+    steps:
+      - name: Check test results
+        run:
+          echo "test: ${{ needs.test.result }}"
+          [[ "${{ needs.test.result }}" == "success" ]] || exit 1
+
