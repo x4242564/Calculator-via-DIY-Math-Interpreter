@@ -1,7 +1,18 @@
 import customtkinter as ctk
-from main import calculate
+import argparse
 
+from main import calculate
 import logger
+
+ap = argparse.ArgumentParser()
+
+ap.add_argument("--debug", "--d", action = "store_true", help="Sets debug mode (optional)")
+
+args = ap.parse_args()
+print(args)
+
+logger.log(f"Debug mode: {args.debug}")
+
 
 calculation = ''
 eval = ''
@@ -27,15 +38,20 @@ class MenuFrame(ctk.CTkScrollableFrame):
         
 class App(ctk.CTk):
 
-    def __init__(self):
+    def __init__(self, debug):
         super().__init__()
 
         ctk.set_appearance_mode("Light")
         ctk.set_default_color_theme("blue")
 
         self.title('DIY Calculator')
-        self.minsize(500,290)
-        self.geometry("500x290")
+
+        if debug:
+            self.minsize(500,290)
+            self.geometry("500x290")
+        else:
+            self.minsize(265,290)
+            self.geometry("265x290")
 
         self.grid_columnconfigure(list(range(0,4)), weight=1)
 
@@ -92,8 +108,9 @@ class App(ctk.CTk):
         self.btn_backspace = ctk.CTkButton(self, text = 'Del', command = self.backspace, font = ('Ariel', 14))
         self.btn_backspace.grid(row = 1, column = 0, columnspan = 1, padx = 6, pady = 4)
 
-        self.menu_frame = MenuFrame(self, title = "Menu")
-        self.menu_frame.grid(row = 0, rowspan = 6, column=6, padx=10)
+        if debug:
+            self.menu_frame = MenuFrame(self, title = "Menu")
+            self.menu_frame.grid(row = 0, rowspan = 6, column=6, padx=10)
 
     def delete(self):
         self.result_txt.configure(state = "normal")
@@ -149,6 +166,7 @@ class App(ctk.CTk):
             calculation = calculation[:-1]
         self.delete()
         self.insert(calculation)
+        self.get_window_size()
 
     def display_error(self):
         '''Displays an error message in the result text widget.'''
@@ -161,5 +179,5 @@ class App(ctk.CTk):
 
         print(f"{width}, {height}")
 
-app = App()
+app = App(args.debug)
 app.mainloop()
