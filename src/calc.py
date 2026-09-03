@@ -5,28 +5,29 @@ calculation = ''
 eval = ''
 ans = ''
 
-def add_to_calc(symbol):
+def add_to_calc(char: str | int):
+    '''Adds the given character to the calculation string.'''
     global calculation
     global eval
     if eval != '':
         clear()
-    calculation += str(symbol)
+    calculation += str(char)
     result_txt.delete(1.0, 'end')
     result_txt.insert(1.0, calculation)
 
 def evaluate_calc():
-    global calculation
+    '''Evaluates the current calculation and displays the result.'''
     global eval
     eval = str(calculate(calculation))
     print(f'{calculation} = {eval}')
     if eval == "None":
-        result_txt.delete(1.0, 'end')
-        result_txt.insert(1.0, 'Error')
+        display_error()
     else:
         result_txt.delete(1.0, 'end')
         result_txt.insert(1.0, eval)
 
 def clear():
+    '''Clears the calculation and result display. Saves the last result in 'ans' if available.'''
     global calculation
     global eval
     global ans
@@ -37,6 +38,7 @@ def clear():
     result_txt.delete(1.0, 'end')
 
 def backspace():
+    '''Removes the last character from the calculation string.'''
     global calculation
     global ans
     global eval
@@ -47,6 +49,11 @@ def backspace():
         calculation = calculation[:-1]
     result_txt.delete(1.0, 'end')
     result_txt.insert(1.0, calculation)
+
+def display_error():
+    '''Displays an error message in the result text widget.'''
+    result_txt.delete(1.0, 'end')
+    result_txt.insert(1.0, 'Error')
 
 root = tk.Tk()
 root.title('DIY Calculator')

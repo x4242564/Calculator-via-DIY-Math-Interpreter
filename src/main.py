@@ -6,8 +6,10 @@ def calculate(text):
     try:
         lexer = Lexer(text)
         tokens = lexer.generate_tokens()
+        print(f"Tokens: {list(tokens)}")
         parser = Parser(tokens)
         tree = parser.parse()
+        print(f"Parsed tree: {tree}")
         if not tree: calculate(text)
         interpreter = Interpreter()
         value = interpreter.visit(tree)
@@ -16,4 +18,6 @@ def calculate(text):
             value.int()  # Removes decimal point if the value is an integer
         return value
     except Exception as e:
-        print(e)
+        print(f"Error: {e}")
+        return None
+        
