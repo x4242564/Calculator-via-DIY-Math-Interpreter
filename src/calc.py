@@ -18,7 +18,7 @@ calculation = ''
 eval = ''
 ans = ''
 
-class MenuFrame(ctk.CTkScrollableFrame):
+class MenuFrameWidget(ctk.CTkScrollableFrame):
     def __init__(self, master, title):
         super().__init__(master, label_text = title)
         self.grid_columnconfigure(0, weight=1)
@@ -109,7 +109,7 @@ class App(ctk.CTk):
         self.btn_backspace.grid(row = 1, column = 0, columnspan = 1, padx = 6, pady = 4)
 
         if debug:
-            self.menu_frame = MenuFrame(self, title = "Menu")
+            self.menu_frame = MenuFrameWidget(self, title = "Menu")
             self.menu_frame.grid(row = 0, rowspan = 6, column=6, padx=10)
 
     def delete(self):
