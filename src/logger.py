@@ -2,7 +2,7 @@ import inspect
 import os
 
 logging = True
-verbose = True
+verbose = False
 
 def log(text):
     if log:
