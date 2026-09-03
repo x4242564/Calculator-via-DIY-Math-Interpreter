@@ -1,4 +1,4 @@
-from tokens import Token, TokenType
+from .tokens import Token, TokenType
 from logger import log, verbose_log
 
 WHITESPACE = ' \n\t' # space, new line, and tab characters

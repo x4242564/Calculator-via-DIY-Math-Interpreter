@@ -1,6 +1,4 @@
-from lexer import Lexer
-from parser_ import Parser
-from interpreter import Interpreter
+from math_interpreter import lexer, parser_, interpreter
 
 from logger import log, verbose_log
 import traceback
@@ -8,12 +6,12 @@ import os
 
 def calculate(text):
     try:
-        lexer = Lexer(text)
-        tokens = lexer.generate_tokens()
-        parser = Parser(tokens)
+        lex = lexer.Lexer(text)
+        tokens = lex.generate_tokens()
+        parser = parser_.Parser(tokens)
         tree = parser.parse()
-        interpreter = Interpreter()
-        value = interpreter.visit(tree)
+        interp = interpreter.Interpreter()
+        value = interp.visit(tree)
         log(f"calculated result: {value}")
         if value.is_integer():
             value.int()  # Removes decimal point if the value is an integer
