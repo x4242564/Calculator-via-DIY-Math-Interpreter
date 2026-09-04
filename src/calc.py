@@ -9,7 +9,6 @@ ap = argparse.ArgumentParser()
 ap.add_argument("--debug", "--d", action = "store_true", help="Sets debug mode (optional)")
 
 args = ap.parse_args()
-print(args)
 
 logger.log(f"Debug mode: {args.debug}")
 
@@ -166,7 +165,6 @@ class App(ctk.CTk):
             calculation = calculation[:-1]
         self.delete()
         self.insert(calculation)
-        self.get_window_size()
 
     def display_error(self):
         '''Displays an error message in the result text widget.'''
