@@ -1,10 +1,10 @@
 from math_interpreter import lexer, parser_, interpreter
 
-from logger import log, verbose_log
+from logger import log, error_log, verbose_log
 import traceback
 import os
 
-def calculate(text):
+def evaluate(text):
     try:
         lex = lexer.Lexer(text)
         tokens = lex.generate_tokens()
@@ -26,7 +26,7 @@ def calculate(text):
         filename = os.path.basename(code.co_filename)
         line_number = tb.tb_lineno
         function_name = code.co_name
-        log(f"{os.path.splitext(filename)[0]} ERROR {e}")
+        error_log(f"{e} ({os.path.splitext(filename)[0]})")
         verbose_log(f"Error origin: {filename} {function_name}() Line: {line_number}")
 
 def main():
@@ -34,7 +34,7 @@ def main():
     while True:
         equation = input("enter equation (\"q\" to quit): ")
         if equation == "q": break
-        eval = calculate(equation)
+        eval = evaluate(equation)
         if eval: print(f'{equation} = {eval}\n')
 
 if __name__ == "__main__":

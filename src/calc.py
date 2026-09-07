@@ -1,9 +1,9 @@
 import customtkinter as ctk
 import argparse
 
-from main import calculate
+from main import evaluate
 import logger
-from logger import log, verbose_log
+from logger import log, verbose_log, error_log
 
 ap = argparse.ArgumentParser()
 
@@ -12,12 +12,44 @@ ap.add_argument("--debug", "--d", action = "store_true", help="Sets debug mode (
 args = ap.parse_args()
 
 log(f"Debug mode: {args.debug}")
-verbose_log(f"Verbose logging: {logger.verbose}")
+verbose_log(f"Verbose logging: {logger.isVerbose}")
 
 
 calculation = ''
 eval = ''
 ans = ''
+
+class App(ctk.CTk):
+
+    def __init__(self, debug):
+        super().__init__()
+
+        ctk.set_appearance_mode("Dark")
+        ctk.set_default_color_theme("blue")
+
+        self.title('DIY Calculator')
+
+        if debug:
+            self.minsize(500,290)
+            self.geometry("500x290")
+        else:
+            self.minsize(265,290)
+            self.geometry("265x290")
+
+        self.grid_columnconfigure([0,1,2], weight = 1)
+
+        self.calculator_frame = Calculator(self)
+        self.calculator_frame.grid(row = 0, column = 1)
+
+        if debug:
+            self.debug_menu_frame = DebugMenu(self, title = "Debug Menu")
+            self.debug_menu_frame.grid(row = 0, column = 0, padx=10)
+
+    def get_window_size(self):
+        width = self._current_width
+        height = self._current_height
+
+        log(f"Window dimensions: {width}, {height}")
 
 class DebugMenu(ctk.CTkScrollableFrame):
     def __init__(self, master, title):
@@ -27,14 +59,14 @@ class DebugMenu(ctk.CTkScrollableFrame):
         self.btn_dim = ctk.CTkButton(self, text = 'Fetch Window Size', command = master.get_window_size, font = ('Ariel', 14))
         self.btn_dim.grid(row = 0, column = 0, columnspan = 1, padx = 4, pady = 4)
 
-        self.v_var = ctk.IntVar(value = int(logger.verbose))
+        self.v_var = ctk.IntVar(value = int(logger.isVerbose))
         self.v_log = ctk.CTkCheckBox(self, command = self.toggle_verbose, variable = self.v_var, text="Verbose Logging")
         self.v_log.grid(row = 1, column=0, padx = 4, pady = 4)
 
     def toggle_verbose(self):
-        logger.verbose = (self.v_var.get()) == 1
+        logger.isVerbose = (self.v_var.get()) == 1
 
-        log(f"Verbose logging: {logger.verbose}")
+        log(f"Verbose logging: {logger.isVerbose}")
 
 class Calculator(ctk.CTkFrame):
     def __init__(self, master):
@@ -119,7 +151,7 @@ class Calculator(ctk.CTkFrame):
     def evaluate_calc(self):
         '''Evaluates the current calculation and displays the result.'''
         global eval
-        eval = str(calculate(calculation))
+        eval = str(evaluate(calculation))
         print(f'{calculation} = {eval}')
         if eval == "None":
             self.display_error()
@@ -155,39 +187,6 @@ class Calculator(ctk.CTkFrame):
         '''Displays an error message in the result text widget.'''
         self.delete()
         self.insert('Error')
-        
-class App(ctk.CTk):
-
-    def __init__(self, debug):
-        super().__init__()
-
-        ctk.set_appearance_mode("Light")
-        ctk.set_default_color_theme("blue")
-
-        self.title('DIY Calculator')
-
-        if debug:
-            self.minsize(500,290)
-            self.geometry("500x290")
-        else:
-            self.minsize(265,290)
-            self.geometry("265x290")
-
-        self.grid_columnconfigure([0,1], weight = 1)
-
-        self.calculator_frame = Calculator(self)
-        self.calculator_frame.grid(row = 0, column = 0)
-
-        if debug:
-            self.debug_menu_frame = DebugMenu(self, title = "Menu")
-            self.debug_menu_frame.grid(row = 0, column = 1, padx=10)
-
-    def get_window_size(self):
-        width = self._current_width
-        height = self._current_height
-
-        log(f"Window dimensions: {width}, {height}")
-        
 
 if __name__ == "__main__":
     app = App(args.debug)
