@@ -1,5 +1,6 @@
 import customtkinter as ctk
 import argparse
+import re
 
 from main import evaluate
 import logger
@@ -36,14 +37,18 @@ class App(ctk.CTk):
             self.minsize(265,290)
             self.geometry("265x290")
 
-        self.grid_columnconfigure([0,1,2], weight = 1)
+        self.grid_columnconfigure([0,1], weight = 1)
+        self.grid_columnconfigure([2], weight = 2)
 
         self.calculator_frame = Calculator(self)
-        self.calculator_frame.grid(row = 0, column = 1)
+        self.calculator_frame.grid(row = 0, column = 1, padx=5)
 
         if debug:
             self.debug_menu_frame = DebugMenu(self, title = "Debug Menu")
-            self.debug_menu_frame.grid(row = 0, column = 0, padx=10)
+            self.debug_menu_frame.grid(row = 0, column = 0, padx=5)
+
+        self.log_frame = LogViewer(self)
+        self.log_frame.grid(row = 0, column = 2, sticky = "nsew", padx=5)
 
     def get_window_size(self):
         width = self._current_width
@@ -67,6 +72,45 @@ class DebugMenu(ctk.CTkScrollableFrame):
         logger.isVerbose = (self.v_var.get()) == 1
 
         log(f"Verbose logging: {logger.isVerbose}")
+
+class LogViewer(ctk.CTkFrame):
+
+    ansi_re = re.compile(r"\033\[(\d+)m")
+
+    # Maps the ANSI codes used in logger.py's `ansi` dict to widget colors.
+    ansi_colors = {
+        "31": "#e06c75",  # red
+        "32": "#98c379",  # green
+        "33": "#e5c07b",  # yellow
+        "34": "#61afef",  # blue
+    }
+
+    def __init__(self, master):
+        super().__init__(master)
+
+        self.log_txt = ctk.CTkTextbox(self, state = "disabled", font = ('Ariel', 8))
+        self.log_txt.pack(padx = 8, pady = 8, fill = "both", expand="true")
+
+        for code, hex_color in self.ansi_colors.items():
+            self.log_txt.tag_config(code, foreground = hex_color)
+
+    def add_log(self, text):
+        '''Translates ANSI color codes to Tk tags.'''
+        self.log_txt.configure(state = "normal")
+
+        pos = 0
+        tag = None
+        for match in self.ansi_re.finditer(text):
+            segment = text[pos:match.start()]
+            if segment:
+                self.log_txt.insert("end", segment, tag)
+            code = match.group(1)
+            tag = code if code in self.ansi_colors else None
+            pos = match.end()
+        self.log_txt.insert("end", text[pos:], tag)
+
+        self.log_txt.configure(state = "disabled")
+        self.log_txt.see("end")
 
 class Calculator(ctk.CTkFrame):
     def __init__(self, master):
@@ -188,6 +232,8 @@ class Calculator(ctk.CTkFrame):
         self.delete()
         self.insert('Error')
 
+app = App(args.debug)
+logger.register_log_view(app.log_frame.add_log)
+
 if __name__ == "__main__":
-    app = App(args.debug)
     app.mainloop()
